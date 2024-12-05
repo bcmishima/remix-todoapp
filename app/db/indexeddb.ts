@@ -1,9 +1,11 @@
+import { uuidv7 } from "uuidv7";
+
 const DB_NAME = "TodoDB";
 const DB_VERSION = 1;
 const STORE_NAME = "todos";
 
 interface Todo {
-  id?: number;
+  id: string;
   title: string;
   completed: boolean;
 }
@@ -51,10 +53,10 @@ export async function addTodo(todo: Todo): Promise<Todo> {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, "readwrite");
     const store = transaction.objectStore(STORE_NAME);
+    todo.id = uuidv7();
     const request = store.add(todo);
 
     request.onsuccess = () => {
-      todo.id = request.result as number;
       resolve(todo);
     };
 
@@ -81,7 +83,7 @@ export async function updateTodo(todo: Todo): Promise<Todo> {
   });
 }
 
-export async function deleteTodo(id: number): Promise<void> {
+export async function deleteTodo(id: string): Promise<void> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, "readwrite");
