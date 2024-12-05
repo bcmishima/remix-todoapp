@@ -54,6 +54,7 @@ export default function Todos() {
         onChange={(e) => setNewTodo(e.target.value)}
       />
       <button onClick={handleAddTodo}>Add Todo</button>
+      <div id="message"></div>
       <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
@@ -64,7 +65,13 @@ export default function Todos() {
               title={`Mark ${todo.title} as ${todo.completed ? "incomplete" : "complete"}`}
             />
             {todo.title}
-            <button onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
+            <button onClick={() => {
+              handleDeleteTodo(todo.id);
+              const messageElement = document.getElementById("message");
+              if (messageElement) {
+                messageElement.innerHTML = todo.title;
+              }
+            }}>Delete</button>
           </li>
         ))}
       </ul>
